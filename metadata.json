@@ -1,0 +1,6 @@
+{
+  "name": "Stargazer Portfolio",
+  "description": "A stunning, atmospheric professional portfolio themed around the quiet observation of celestial wonders, featuring high-fidelity dark themes, glassmorphism, and elegant typography.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
