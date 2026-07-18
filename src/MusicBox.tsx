@@ -7,7 +7,7 @@ export default function MusicBox() {
   // 初始化音訊
   useEffect(() => {
     // 指向 public/bgm.mp3
-    audioRef.current = new Audio('/artmylife-powerful-dramatic-trailer-514242.mp3');
+    audioRef.current = new Audio('/mao690276--562451.mp3');
     audioRef.current.loop = true; // 設定循環播放
     audioRef.current.volume = 0.4; // 設定初始音量 (40% 比較不會嚇到人)
 
