@@ -848,7 +848,7 @@ export default function App() {
                   className="bg-primary text-on-primary px-6 py-2 rounded-full font-mono text-xs tracking-widest uppercase hover:bg-opacity-90 active:scale-95 transition-all cursor-pointer"
                   id="modal-acknowledgement-btn"
                 >
-                  Dismiss Case File
+                  跳出
                 </button>
               </div>
             </motion.div>
