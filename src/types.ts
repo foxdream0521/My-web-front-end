@@ -6,9 +6,7 @@ export interface Project {
   imageUrl: string;
   altText: string;
   fullStory?: string;
-  tags?: string[];
-  client?: string;
-  year?: string;
+  date?: string;
   tools?: string[];
 }
 

@@ -22,6 +22,13 @@ import {
 } from 'lucide-react';
 import { PROJECTS, JOURNAL_ENTRIES, STATS, HERO_IMAGE, PORTRAIT_IMAGE } from './data';
 import { Project, JournalEntry } from './types';
+import MouseClickEffect from './MouseClickEffect';
+import ParticleEffect from './ParticleEffect';
+import AmbientParticles from './AmbientParticles';
+import CustomCursor from './CustomCursor';
+import KonamiCode from './KonamiCode';
+import MusicBox from './MusicBox';
+import ChaosMode from './ChaosMode';
 
 export default function App() {
   // State for gallery filters
@@ -47,12 +54,12 @@ export default function App() {
   // State for cat's footprint Easter egg quotes
   const [catQuoteIndex, setCatQuoteIndex] = useState<number>(-1);
   const catQuotes = [
-    "“Like a cat watching the city from a rooftop, I observe patterns, movements, and details...”",
-    "“In the dark, all colors are silver.”",
-    "“True observation requires silence. Moving without sound, seeing without being seen.”",
-    "“The night is not empty. It is merely waiting.”"
+    "“(*ˊᵕˋ*)੭ ੈ❤”",
+    "“(*˘︶˘*).｡.*♡”",
+    "“ʚ(*´꒳`*)ɞ .｡* ~♡”",
+    "(^ ̥_ ̫ _ ̥^)"
   ];
-
+  const [avatarClickCount, setAvatarClickCount] = useState<number>(0);
   // State for background brightness toggle in Hero
   const [heroDimmed, setHeroDimmed] = useState<boolean>(true);
 
@@ -120,7 +127,14 @@ export default function App() {
 
   return (
     <div className="bg-background text-on-background font-sans min-h-screen relative overflow-x-hidden selection:bg-primary selection:text-on-primary">
-      
+    
+    <ChaosMode />
+    <MusicBox />
+    <KonamiCode />
+    <CustomCursor />
+    <AmbientParticles />
+    <MouseClickEffect />
+    <ParticleEffect />
       {/* Background Starry Atmosphere with Immersive UI Glowing Accents */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <div className="absolute -top-[10%] -left-[10%] w-[600px] h-[600px] bg-indigo-600/15 rounded-full blur-[120px]" />
@@ -144,10 +158,9 @@ export default function App() {
 
           <nav className="hidden md:flex items-center gap-10">
             {[
-              { label: "Gallery", id: "gallery-section" },
-              { label: "Projects", id: "projects-section" },
-              { label: "About", id: "about-section" },
-              { label: "Journal", id: "journal-section" }
+              { label: "分享", id: "gallery-section" },
+              { label: "簡介", id: "about-section" },
+              { label: "日常", id: "journal-section" }
             ].map((link, idx) => (
               <motion.button
                 key={link.id}
@@ -266,13 +279,13 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <div className="star-divider" />
-                <span className="text-primary font-mono text-xs uppercase tracking-widest">123</span>
+                <span className="text-primary font-mono text-xs uppercase tracking-widest"></span>
               </div>
               <h3 className="font-headline text-3xl md:text-4xl font-semibold text-on-background mb-4" id="gallery-title">
-                我不知道
+                分享照片的地方₍^˶･w･˶^₎
               </h3>
               <p className="font-sans text-base text-on-surface-variant max-w-xl leading-relaxed" id="gallery-description">
-                我再想想
+                ─=≡Σ((( つ•̀ω•́)つ
               </p>
             </div>
 
@@ -399,15 +412,59 @@ export default function App() {
               </div>
 
               {/* Central portrait frame */}
-              <div className="absolute w-[240px] md:w-[280px] aspect-square rounded-full overflow-hidden border border-primary/45 shadow-[0_0_30px_rgba(190,198,224,0.1)] group">
-                <img 
-                  className="w-full h-full object-cover filter grayscale brightness-[0.7] hover:brightness-95 hover:scale-105 hover:grayscale-0 transition-all duration-1000 ease-in-out" 
-                  src={PORTRAIT_IMAGE}
-                  alt="Stargazer portfolio photographer creative designer portrait"
-                  id="about-portrait-img"
-                />
+              <div className="absolute z-10 w-[240px] md:w-[280px] aspect-square rounded-full border border-primary/30 group transition-all duration-1000 ease-in-out hover:border-primary">
+  
+                {/* ✨ 新增：貓咪對話框 (當點擊滿 5 次且有對話索引時顯示) */}
+                <AnimatePresence>
+                  {avatarClickCount >= 5 && catQuoteIndex !== -1 && (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.8, y: 10 }}
+                      className="absolute -top-16 left-1/2 -translate-x-1/2 bg-surface/90 text-primary px-4 py-2 rounded-xl border border-primary/30 shadow-lg font-mono text-sm whitespace-nowrap backdrop-blur-md z-20"
+                    >
+                      {catQuotes[catQuoteIndex]}
+                      {/* 對話框下方的小三角形箭頭 */}
+                      <div className="absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[6px] border-t-surface/90" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Outer "Breathing" and "Halo" Div */}
+                <div className="absolute inset-0 rounded-full shadow-[0_0_15px_rgba(190,198,224,0.1)] group-hover:animate-pulse transition-shadow duration-1000 hover:shadow-[0_0_45px_rgba(190,198,224,0.5)]">
+    
+                  {/* Inner Image Mask Div */}
+                  <div className="absolute inset-1.5 rounded-full overflow-hidden shadow-inner bg-background/50">
+                    <img 
+                      // ✨ 新增 onClick 事件：每次點擊次數 +1
+                      onClick={() => {
+                        const nextCount = avatarClickCount + 1;
+                        setAvatarClickCount(nextCount);
+
+                        // 當點擊達到 5 次或以上時，隨機挑選一句貓咪對話
+                        if (nextCount >= 5) {
+                          const randomIndex = Math.floor(Math.random() * catQuotes.length);
+                          setCatQuoteIndex(randomIndex);
+
+            // 可選：如果你希望貓咪講完話 3 秒後對話框自己消失，可以解開下方註釋
+            
+                          setTimeout(() => {
+                            setAvatarClickCount(0);
+                            setCatQuoteIndex(-1);
+                          }, 5000);
+                          
+                        }
+                      }}
+                      className="w-full h-full object-cover filter transition-transform duration-1000 ease-in-out group-hover:scale-110 cursor-pointer" 
+                      src={PORTRAIT_IMAGE}
+                      alt="Stargazer portfolio photographer creative designer portrait"
+                      id="about-portrait-img"
+                    />
+                  </div>
+
+                </div>
               </div>
-            </div>
+          </div>
 
             {/* Narrative Context */}
             <div className="flex flex-col justify-center">
@@ -425,7 +482,7 @@ export default function App() {
               </p>
 
               <p className="font-sans text-base md:text-lg text-on-surface-variant mb-12 leading-relaxed">
-                我的興趣很多對很多事情感興趣,所以學過很多事情,但熟不熟就是一回事了₍^. .^₎⟆因為太多想學的想嘗試的但時間目前不夠,只好等未來有空慢慢學慢慢嘗試！最起碼我想先把現在喜歡的學好,好玩但好難要付出走夠的努力爆肝了TAT
+                我的興趣很多對很多事情感興趣,所以學過很多事情,但熟不熟就是一回事了₍^. .^₎⟆因為太多想學的想嘗試的但時間目前不夠,只好等未來有空慢慢學慢慢嘗試！最起碼我想先把現在喜歡的學好,好玩但好難要付出足夠的努力爆肝了TAT
               </p>
 
               {/* Tappable metrics */}
@@ -454,7 +511,7 @@ export default function App() {
                         >
                           {stat.id === 'years-observation' 
                             ? "౨ৎ𐙚生日那天該愛我一下吧⋆.˚₊⊹♡." 
-                            : "85 completed physical drafts, mockups, and client handoffs."}
+                            : "什麼都沒有>w<"}
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -491,9 +548,9 @@ export default function App() {
 
               {/* Paw/Footprint SVG representing the feline observer */}
               <div className="text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2">
-                <span className="text-[10px] font-mono opacity-60 tracking-wider">NOCTURNAL VISITOR</span>
+                <span className="text-[10px] font-mono opacity-60 tracking-wider">夜优在此藏一個貓掌</span>
                 <svg className="w-16 h-16 fill-current animate-pulse" viewBox="0 0 24 24">
-                  <path d="M12,14c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3S13.66,14,12,14z M7,10c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S8.1,10,7,10z M17,10c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S18.1,10,17,10z M12,4c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S13.1,4,12,4z" />
+                  <path d="M12,13.5c-2,0-3.5,1.0-3.5,2.5c0,1.5,1.5,2.5,3.5,2.5c2,0,3.5-1.0,3.5-2.5c0,-1.5-1.5,-2.5-3.5,-2.5z M7,9.5c-1.2,0-2,0.9-2,2s0.8,2,2,2s2-0.9,2-2S8.2,9.5,7,9.5z M17,9.5c-1.2,0-2,0.9-2,2s0.8,2,2,2s2-0.9,2-2S18.2,9.5,17,9.5z M12,7c-1.2,0-2,0.9-2,2s0.8,2,2,2s2-0.9,2-2S13.2,7,12,7z" />
                 </svg>
               </div>
             </div>
@@ -505,10 +562,10 @@ export default function App() {
           <div className="mb-16 text-center md:text-left">
             <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
               <div className="star-divider" />
-              <span className="text-primary font-mono text-xs uppercase tracking-widest">Writings & Thoughts</span>
+              <span className="text-primary font-mono text-xs uppercase tracking-widest">₍⑅ᐢ..ᐢ⑅₎𓂋⊹° ✦</span>
             </div>
             <h3 className="font-headline text-3xl font-semibold text-on-background" id="journal-title">
-              Nocturnal Logs
+              日常小事分享處！
             </h3>
           </div>
 
@@ -556,17 +613,47 @@ export default function App() {
 
           <div className="relative z-10 px-6 max-w-2xl mx-auto flex flex-col items-center">
             <h2 className="font-headline text-3xl md:text-5xl font-bold text-on-background mb-6 leading-tight" id="cta-title">
-              Join the Night Watch
+              (((＼（✘෴✘）／)))
             </h2>
             <p className="font-sans text-base md:text-lg text-on-surface-variant mb-10 leading-relaxed" id="cta-description">
-              Sign up for my journal to receive quiet reflections on design, art, and the beauty of the dark. No noise, just cosmos.
+              這裡什麼都沒有
             </p>
 
-            <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 w-full justify-center items-stretch" id="cta-form">
+            {/* 💡 音樂與情話彩蛋表單 */}
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                
+                // 🔑 在這裡設定你的客製化驚喜密碼
+                const CORRECT_PASSWORD = "catsleep"; 
+                
+                if (email.trim() === CORRECT_PASSWORD) {
+                  
+                  // 🎵 動作 1：自動播放音樂
+                  // 這裡利用 class 或標籤暗中尋找你的 MusicBox 播音按鈕並觸發點擊
+                  // 如果你的音樂盒按鈕有特定的 id（例如 id="music-play-btn"），可以改成 getElementById
+                  const musicBtn = document.querySelector('.music-box-btn, #music-btn, button[aria-label="Play music"]') as HTMLButtonElement;
+                  if (musicBtn) {
+                    musicBtn.click();
+                  }
+
+                  // 💬 動作 2：彈出你想說的一句話
+                  // 你可以把下面這段話改成任何你想對她/他或訪客說的專屬對白
+                  alert("「恭喜你密碼輸正確！( • ̀ω•́ )b ✧」");
+
+                  
+                  setEmail("");
+                } else {
+                  alert("密碼不正確。暗號沉沒在名字中...");
+                }
+              }} 
+              className="flex flex-col sm:flex-row gap-4 w-full justify-center items-stretch" 
+              id="cta-form"
+            >
               <input 
-                className="bg-surface-container border border-outline/20 rounded-full px-6 py-4 focus:outline-none focus:border-primary/50 transition-colors text-on-surface w-full sm:w-96 font-sans text-sm placeholder:text-on-surface-variant/40" 
-                placeholder="Your celestial address (email)" 
-                type="email"
+                className="bg-surface-container border border-outline/20 rounded-full px-6 py-4 focus:outline-none focus:border-primary/50 transition-colors text-on-surface w-full sm:w-96 font-sans text-sm placeholder:text-on-surface-variant/40 text-center" 
+                placeholder="Enter the secret space code..." 
+                type="text"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -574,18 +661,11 @@ export default function App() {
               />
               <button 
                 type="submit"
-                disabled={subscribing}
-                className="bg-primary text-on-primary font-mono text-xs font-bold tracking-widest px-8 py-4 rounded-full hover:bg-opacity-90 transition-all shadow-[0_0_20px_rgba(190,198,224,0.15)] flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className="bg-primary text-on-primary font-mono text-xs font-bold tracking-widest px-8 py-4 rounded-full hover:bg-opacity-90 transition-all shadow-[0_0_20px_rgba(190,198,224,0.15)] flex items-center justify-center gap-2 cursor-pointer"
                 id="cta-submit-btn"
               >
-                {subscribing ? (
-                  <span>SENDING...</span>
-                ) : (
-                  <>
-                    <span>SUBSCRIBE</span>
-                    <Send className="w-3.5 h-3.5" />
-                  </>
-                )}
+                <span>DECRYPT</span>
+                <Send className="w-3.5 h-3.5" />
               </button>
             </form>
 
@@ -605,10 +685,7 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Live stats ticker to make app feel exceptionally alive */}
-            <div className="mt-8 text-xs font-mono text-on-surface-variant/50" id="cta-live-ticker">
-              Currently orbiting with <span className="text-primary font-bold">{subscriberCount}</span> night watchers.
-            </div>
+            
 
             {/* Subscribers preview panel if any exists */}
             {subscribersList.length > 0 && (
@@ -635,20 +712,18 @@ export default function App() {
           <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
             <h2 className="font-headline text-2xl text-primary tracking-tighter font-extrabold flex items-center gap-2">
               <Moon className="w-5 h-5 text-primary" />
-              <span>Stargazer</span>
+              <span>foxdream</span>
             </h2>
             <p className="font-mono text-[10px] text-on-surface-variant uppercase tracking-widest" id="footer-copyright">
-              &copy; 2026 Stargazer. Observed from the quiet depths.
+              &copy; 2026 foxdream. 個人小網站(՞•֊•՞).
             </p>
           </div>
 
           {/* Social connections */}
           <div className="flex gap-10" id="footer-social-links">
             {[
-              { label: "Instagram", icon: <Instagram className="w-4 h-4" />, href: "https://instagram.com" },
-              { label: "LinkedIn", icon: <Linkedin className="w-4 h-4" />, href: "https://linkedin.com" },
-              { label: "Dribbble", icon: <Dribbble className="w-4 h-4" />, href: "https://dribbble.com" },
-              { label: "Email", icon: <Mail className="w-4 h-4" />, href: "mailto:stargazer@celestial.design" }
+              { label: "Instagram", icon: <Instagram className="w-4 h-4" />, href: "https://www.instagram.com/sleep.0220.0?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" },
+              
             ].map((social) => (
               <a 
                 key={social.label}
@@ -727,12 +802,8 @@ export default function App() {
                   {/* Metadata cards */}
                   <div className="grid grid-cols-2 gap-4 border-t border-b border-outline/10 py-4 font-mono text-xs text-on-surface-variant">
                     <div>
-                      <p className="text-primary uppercase tracking-wider text-[10px] mb-1">Client</p>
-                      <p className="font-medium text-on-background">{selectedProject.client || "Nocturnal Agency"}</p>
-                    </div>
-                    <div>
-                      <p className="text-primary uppercase tracking-wider text-[10px] mb-1">Year</p>
-                      <p className="font-medium text-on-background">{selectedProject.year || "2024"}</p>
+                      <p className="text-primary uppercase tracking-wider text-[10px] mb-1">date</p>
+                      <p className="font-medium text-on-background">{selectedProject.date || "2024"}</p>
                     </div>
                   </div>
 
@@ -807,7 +878,7 @@ export default function App() {
               <div className="flex justify-between items-center border-b border-outline/10 pb-4">
                 <div className="flex items-center gap-2">
                   <Compass className="w-5 h-5 text-primary animate-[spin_10s_linear_infinite]" />
-                  <span className="font-mono text-sm text-primary uppercase tracking-widest">Connect with Stargazer</span>
+                  <span className="font-mono text-sm text-primary uppercase tracking-widest">意見收集處°ʚ(*´꒳`*)ɞ°</span>
                 </div>
                 <button 
                   onClick={() => setIsConnectOpen(false)}
@@ -819,7 +890,7 @@ export default function App() {
               </div>
 
               <p className="font-sans text-sm text-on-surface-variant leading-relaxed">
-                Send a signal into the deep space. Whether it is a project query, collaboration idea, or simple nighttime feedback, your frequency is welcomed.
+                  歡迎把意見跟我說～˖˚˳⌖ ଘ(⸝⸝ᴗ͈ ̫ ᴗ͈⸝⸝)ॢ* ੈ ♡‧₊ ˚.    要聊天也沒問題！！！雖然這個目前會石沈大海看不到w亂打就好！
               </p>
 
               <form onSubmit={handleContactSubmit} className="flex flex-col gap-4">

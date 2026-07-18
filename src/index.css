@@ -1,7 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500&family=Geist:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@import "tailwindcss";
+@import "tailwindcss";
 
+html, body, button, a {
+  cursor: none !important; /* ✨ 全域隱藏系統內建滑鼠 */
+}
 @theme {
+  /* ✨ 自訂點擊波紋動畫的關鍵幀 (Keyframes) */
+  @keyframes clickRipple {
+    0% { transform: scale(0); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+  }
+
+  /* ✨ 註冊你的動畫名稱，這樣才能在 className 裡用 animate-ripple */
+  --animate-ripple: clickRipple 0.6s ease-out forwards;
+}
+@theme {
+  
   --color-surface-container-high: rgba(255, 255, 255, 0.08);
   --color-surface: #0f172a;
   --color-inverse-surface: #f1f5f9;
